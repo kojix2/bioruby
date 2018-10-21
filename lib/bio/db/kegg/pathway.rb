@@ -42,12 +42,22 @@ class PATHWAY < KEGGDB
   def orthologs_as_hash; super; end if false #dummy for RDoc
   alias orthologs orthologs_as_hash
 
+  include Common::GenesAsHash
+  # Returns a Hash of the organism ID and an Array of entry IDs in GENES field.
+  def genes_as_hash; super; end if false #dummy for RDoc
+  alias genes genes_as_hash
+
   include Common::References
   # REFERENCE -- Returns contents of the REFERENCE records as an Array of
   # Bio::Reference objects.
   # ---
   # *Returns*:: an Array containing Bio::Reference objects
   def references; super; end if false #dummy for RDoc
+
+  include Common::DiseasesAsHash
+  # Returns a Hash of the disease ID and its definition
+  def diseases_as_hash; super; end if false #dummy for RDoc
+  alias diseases diseases_as_hash
 
   include Common::ModulesAsHash
   # Returns MODULE field as a Hash.
@@ -57,11 +67,6 @@ class PATHWAY < KEGGDB
   # *Returns*:: Hash
   def modules_as_hash; super; end if false #dummy for RDoc
   alias modules modules_as_hash
-
-  #--
-  # for a private method strings_as_hash.
-  #++
-  include Common::StringsAsHash
 
   # Creates a new Bio::KEGG::PATHWAY object.
   # ---
@@ -121,17 +126,6 @@ class PATHWAY < KEGGDB
   def diseases_as_strings
     lines_fetch('DISEASE')
   end
-
-  # Diseases described in the DISEASE lines.
-  # ---
-  # *Returns*:: Hash of disease ID and its definition
-  def diseases_as_hash
-    unless (defined? @diseases_as_hash) && @diseases_as_hash
-      @diseases_as_hash = strings_as_hash(diseases_as_strings)
-    end
-    @diseases_as_hash
-  end
-  alias diseases diseases_as_hash
 
   # Returns an Array of a database name and entry IDs in DBLINKS field.
   # ---
